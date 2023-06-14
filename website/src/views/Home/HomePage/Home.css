@@ -1,0 +1,10 @@
+:root {
+    --yellow: #FFB703;
+    --black: #1E1E1E;
+    --red: #FB0000;
+}
+
+* {
+  margin: 0;
+  padding: 0;  
+}
