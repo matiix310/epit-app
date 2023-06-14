@@ -11,7 +11,7 @@ type Props = {
 
 function LoginButton({authType}: Props) {
 
-    const [searching, setSearching] = useState(false);
+    // const [searching, setSearching] = useState(false);
     const [username, setUsername] = useState('');
 
     const images = {
