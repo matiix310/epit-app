@@ -8,6 +8,7 @@ import Pegasus from './views/Pegasus/PegasusPage/pegasus';
 import Zeus from './views/Zeus/ZeusPage/zeus';
 import Moodle from './views/Moodle/MoodlePage/moodle';
 import notFound from './views/NotFound/NotFoundPage/notFound';
+import MicrosoftAuth from './views/MicrosoftAuth/MicrosoftAuthPage/MicrosoftAuth';
 
 // setup the router
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
     {
         path: '/moodle',
         Component: Moodle
+    },
+    {
+        path: 'microsoftAuth',
+        Component: MicrosoftAuth
     }
 ])
 
