@@ -5,6 +5,7 @@ import './moodle.css'
 
 // components
 import RightPanel from '@components/RightPanel/RightPanel'
+import Title from '@components/Title/Title'
 
 
 function Moodle() {
@@ -12,6 +13,7 @@ function Moodle() {
         <>
             <div>Moodle</div>
             <RightPanel />
+            <Title name='MOODLE' />
         </>
     )
 }

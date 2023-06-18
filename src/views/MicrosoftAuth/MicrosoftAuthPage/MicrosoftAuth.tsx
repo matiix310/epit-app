@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function MicrosoftAuth() {
 
@@ -7,13 +8,20 @@ function MicrosoftAuth() {
     );
 
     if (parsedHash.has('access_token') && parsedHash.has('id_token')) {
-        fetch(`http://localhost:8000/pegasus?microsoft_access_token=${parsedHash.get('access_token')}`,)
-            .then(res => res.json())
-            .then(data => console.log(data));
+        // set the microsoft_access_token value in the sessionStorage
+        window.sessionStorage.setItem('microsoft_access_token', parsedHash.get('access_token')!);
     }
+
+    const navigate = useNavigate();
+
+    // redirect to homepage
+    useEffect(() => {
+        navigate('/home');
+    })
 
     return (
         <>
+            Redirection en cours...
         </>
     )
 }

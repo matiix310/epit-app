@@ -4,7 +4,7 @@ import './index.css';
 import Home from './views/Home/HomePage/Home';
 
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import Pegasus from './views/Pegasus/PegasusPage/pegasus';
+import Pegasus from './views/Pegasus/PegasusPage/Pegasus';
 import Zeus from './views/Zeus/ZeusPage/zeus';
 import Moodle from './views/Moodle/MoodlePage/moodle';
 import notFound from './views/NotFound/NotFoundPage/notFound';
@@ -44,7 +44,5 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+    <RouterProvider router={router} />
 );

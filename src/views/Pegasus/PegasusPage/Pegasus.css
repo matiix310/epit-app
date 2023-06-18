@@ -1,0 +1,10 @@
+.gradeContainer {
+    position: absolute;
+    top: 20%;
+    left: 2.5%;
+
+    width: 70%;
+    height: 80%;
+
+    background-color: red;
+}

@@ -1,9 +1,13 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import './LoginButton.css'
 
 // logo
 import microsoftLogo from '@assets/microsoft.png'
 import forgeLogo from '@assets/forge.png'
+
+// utils
+import * as microsoftApi from '@utils/microsoft'
+
 
 type Props = {
     authType: 'microsoft' | 'forge'
@@ -19,13 +23,45 @@ function LoginButton({authType}: Props) {
         'forge': forgeLogo,
     }
 
-    const isConnected = username !== '';
+    useEffect(() => {
+        if (authType === 'microsoft') {
+            const microsoft_access_token = window.sessionStorage.getItem('microsoft_access_token');
+            const microsoft_username = window.sessionStorage.getItem('microsoft_username');
+            if (microsoft_username) {
+                setUsername(microsoft_username);
+
+            } else if (microsoft_access_token) {
+                microsoftApi.getUserInfo(window.sessionStorage.getItem('microsoft_access_token')!)
+                .then(userInfo => {
+                    setUsername(userInfo.email);
+                    window.sessionStorage.setItem('microsoft_username', userInfo.email);
+                })
+            }
+        }
+    }, [authType])
+    // check for microsoft authentification
+
+    const isConnected = (): boolean => {
+        // microsoft auth
+        if (authType === 'microsoft') {
+            // get the microsoft_access_token and return true if it exist
+            return window.sessionStorage.getItem('microsoft_access_token') !== null;
+        }
+
+        else if (authType === 'forge') {
+            // get the forge_access_token 
+            return username !== "";
+        }
+
+        return false;
+    };
 
     const loginButtonHandle = () => {
         if (authType === 'microsoft') {
-            if (isConnected) {
-                // microsoft unauthentification
+            if (isConnected()) {
+                // microsoft logout
                 setUsername('');
+                window.sessionStorage.removeItem('microsoft_access_token');
             } else {
                 // microsoft authentification
                 const microsoftAuthUrl = 
@@ -39,12 +75,11 @@ function LoginButton({authType}: Props) {
                     state=0000`
 
                 window.location.assign(encodeURI(microsoftAuthUrl));
-                // setUsername('lucas.stephan@epita.fr');
             }
         }
 
         else if (authType === 'forge') {
-            if (isConnected) {
+            if (isConnected()) {
                 // microsoft unauthentification
                 setUsername('');
             } else {
@@ -60,7 +95,7 @@ function LoginButton({authType}: Props) {
                 <img src={images[authType]} alt={authType + 'icon'} />
                 <div className="txt-container">
                     <h1>{username === '' ? 'Non connecté' : username}</h1>
-                    <h1 onClick={loginButtonHandle} className={isConnected ? 'red' : 'yellow'}>{isConnected ? 'Se déconnecter' : 'Se connecter'}</h1>
+                    <h1 onClick={loginButtonHandle} className={isConnected() ? 'red' : 'yellow'}>{isConnected() ? 'Se déconnecter' : 'Se connecter'}</h1>
                 </div>
             </div>
         </>
