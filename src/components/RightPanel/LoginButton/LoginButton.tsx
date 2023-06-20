@@ -66,7 +66,7 @@ function LoginButton({ authType }: Props) {
                     client_id=${process.env.REACT_APP_MICROSOFT_CLIENT_ID}&
                     response_type=token+id_token&
                     response_mode=fragment&
-                    redirect_uri=http://localhost:3000/microsoftAuth&
+                    redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&
                     scope=openid&
                     nonce=000042
                     state=0000`;
