@@ -1,10 +1,28 @@
 .gradeContainer {
-    position: absolute;
-    top: 20%;
-    left: 2.5%;
+  position: absolute;
+  top: 20%;
+  left: 2.5%;
 
-    width: 70%;
-    height: 80%;
+  width: 70%;
+  height: 80%;
 
-    background-color: red;
+  /* background-color: red; */
+}
+
+.ue-header {
+  display: flex;
+  width: 90%;
+  justify-content: center;
+}
+
+.ue-title {
+  width: 100%;
+  font-size: 25px;
+}
+
+.ue-content {
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-bottom: 20px;
+  margin-top: 10px;
 }

@@ -1,120 +1,279 @@
 import { PegasusGrade, PegasusGrades } from "./api";
 
+type PegasusGradeWithInt = {
+  [K in keyof PegasusGrade]: K extends
+    | "evaluation_coef"
+    | "mark_note"
+    | "mark_min"
+    | "mark_max"
+    | "mark_avg"
+    | "mark_on"
+    | "effectif"
+    ? number
+    : PegasusGrade[K];
+};
+
+type PegasusEcue = {
+  coef: number;
+  coefs: {
+    [key: string]: number;
+  };
+  personalMean: number;
+  classMean: number;
+  grades: PegasusGradeWithInt[];
+};
+
+type PegasusUe = {
+  /**
+   * ECUE name
+   */
+  [key: string]: PegasusEcue;
+};
+
 type PegasusSchemaType = {
+  /**
+   * UE name
+   */
+  [key: string]: {
     /**
-     * UE name
+     * ECUE name
      */
     [key: string]: {
-        /**
-         * ECUE name
-         */
-        [key: string]: {
-            "coef": number
-        }
-    }
-}
+      coef: number;
+      coefs: {
+        [key: string]: number;
+      };
+    };
+  };
+};
 
 type PegasusParsedGrades = {
-    /**
-     * UE name
-     */
-    [key: string]: {
-        /**
-         * ECUE name
-         */
-        [key: string]: {
-            "coef": number,
-            "grades": PegasusGrade[]
-        }
-    }
-}
+  /**
+   * UE name
+   */
+  [key: string]: PegasusUe;
+};
 
 type SchemasId = "S1";
 
+type CountsType = {
+  personnal: { [key: string]: { count: number; tot: number } };
+  class: { [key: string]: { count: number; tot: number } };
+};
+
 class PegasusSchema {
+  static Schemas: { [key: string]: PegasusSchemaType } = {
+    S1: {
+      "UE MATH1 Mathématiques 1": {
+        "ECUE MATH1 Mathématiques 1 CC": {
+          coef: 1,
+          coefs: {
+            SEMINAIRE: 1,
+            "CC QCM": 2,
+            TD: 2,
+            AFIT: 2,
+            "CC ECRIT": 3,
+            PARTIEL: 5,
+          },
+        },
+      },
+      "UE ALGO1 Algorithmique 1": {
+        "ECUE ALGO1 Algorithmique 1 CC": {
+          coef: 1,
+          coefs: {
+            SEMINAIRE: 1,
+            "CC QCM": 2,
+            "CC ECRIT": 3,
+            PARTIEL: 5,
+          },
+        },
+      },
+      "UE IP1 Informatique pratique 1": {
+        "ECUE PROG1 Programmation 1 CC": {
+          coef: 1,
+          coefs: {
+            "CC Suivi": 1,
+            "CC ECRIT": 2,
+            PARTIEL: 3,
+          },
+        },
+      },
+      "UE SI1 Sciences de l'ingénieur 1": {
+        "ECUE NTS1 Nouvelles Technologies et Société 1 CC": {
+          coef: 1,
+          coefs: {
+            "CC QCM": 1,
+            "CC Suivi": 2,
+          },
+        },
+        "ECUE PHYS/ELEC1 Physique - Electronique 1 CC": {
+          coef: 2,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            PARTIEL: 2,
+          },
+        },
+        "ECUE ADO1 Architecture 1 CC": {
+          coef: 2,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            PARTIEL: 2,
+          },
+        },
+      },
+      "UE SH1 Sciences humaines 1": {
+        "ECUE TE1 Technique d'expression 1 CC": {
+          coef: 4,
+          coefs: {
+            "CC ECRIT": 1,
+            "CC QCM": 1,
+            "CC Suivi": 2,
+            PARTIEL: 3,
+          },
+        },
+        "ECUE TIM1 Anglais technique 1 CC": {
+          coef: 3,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            "CC Suivi": 2,
+            PARTIEL: 3,
+          },
+        },
+        "ECUE CIE1 Anglais général 1 CC": {
+          coef: 3,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            TOEIC: 1,
+            "CC Suivi": 2,
+            PARTIEL: 3,
+          },
+        },
+      },
+    },
+  };
 
-    static Schemas: { [key: string]: PegasusSchemaType } = {
-        "S1": {
-            "UE MATH1 Mathématiques 1": {
-                "ECUE MATH1 Mathématiques 1 CC": {
-                    "coef": 1
-                }
-            },
-            "UE ALGO1 Algorithmique 1": {
-                "ECUE ALGO1 Algorithmique 1 CC": {
-                    "coef": 1
-                }
-            },
-            "UE IP1 Informatique pratique 1": {
-                "ECUE PROG1 Programmation 1 CC": {
-                    "coef": 1
-                }
-            },
-            "UE SI1 Sciences de l'ingénieur 1": {
-                "ECUE NTS1 Nouvelles Technologies et Société 1 CC": {
-                    "coef": 1
-                },
-                "ECUE PHYS/ELEC1 Physique - Electronique 1 CC": {
-                    "coef": 2
-                },
-                "ECUE ADO1 Architecture 1 CC": {
-                    "coef": 2
-                }
-            },
-            "UE SH1 Sciences humaines 1": {
-                "ECUE TE1 Technique d'expression 1 CC": {
-                    "coef": 4
-                },
-                "ECUE TIM1 Anglais technique 1 CC": {
-                    "coef": 3
-                },
-                "ECUE CIE1 Anglais général 1 CC": {
-                    "coef": 3
-                }
-            }
-        }
-    }
+  /**
+   * Compute the personnal and class means of the input grades.
+   * @param grades The input grades to compute the personnal and class means.
+   */
+  static computeMeans(grades: PegasusParsedGrades): PegasusParsedGrades {
+    Object.keys(grades).forEach((ueName) => {
+      Object.keys(grades[ueName]).forEach((ecueName) => {
+        // compute the ecue means
+        let counts: CountsType = {
+          personnal: {},
+          class: {},
+        };
 
-    /**
-     * Parse grades return fro the api depending on a given schemas
-     * @param grades The input grades to parse
-     * @param schemasId The schema id you want to use
-     * @returns The parsed grades
-     */
-    static parseGrades(grades: PegasusGrades, schemasId: SchemasId): PegasusParsedGrades {
-        const selectedSchemas = PegasusSchema.Schemas[schemasId];
+        grades[ueName][ecueName].grades.forEach((grade) => {
+          // init with default value if empty
+          if (!counts.personnal[grade.evaluation_type_de_note_id]) {
+            counts.personnal[grade.evaluation_type_de_note_id] = {
+              count: 0,
+              tot: 0,
+            };
+            counts.class[grade.evaluation_type_de_note_id] = {
+              count: 0,
+              tot: 0,
+            };
+          }
+          // personnal mean
+          counts.personnal[grade.evaluation_type_de_note_id].count +=
+            (grade.mark_note / grade.mark_on) * 20;
+          counts.personnal[grade.evaluation_type_de_note_id].tot += 1;
+          // class mean
+          counts.class[grade.evaluation_type_de_note_id].count +=
+            (grade.mark_avg / grade.mark_on) * 20;
+          counts.class[grade.evaluation_type_de_note_id].tot += 1;
+        });
 
-        const datas: PegasusGrade[] = []
+        let [ecuePersonnalCount, ecueClassCount, ecueTot] = [0, 0, 0];
 
-        Object.keys(grades).forEach(ecueName => {
-            Object.keys(grades[ecueName]).forEach(gradeName => {
-                datas.push(grades[ecueName][gradeName]);
-            })
-        })
+        Object.keys(counts.personnal).forEach((gradeId) => {
+          const coef = grades[ueName][ecueName].coefs[gradeId];
 
-        const output: PegasusParsedGrades = {}
+          ecuePersonnalCount +=
+            (counts.personnal[gradeId].count / counts.personnal[gradeId].tot) * coef;
+          ecueClassCount +=
+            (counts.class[gradeId].count / counts.class[gradeId].tot) * coef;
+          ecueTot += coef;
+        });
 
-        // add the ues
-        Object.keys(selectedSchemas).forEach(ueName => {
-            output[ueName] = {}
+        grades[ueName][ecueName].personalMean =
+          Math.round((ecuePersonnalCount / ecueTot) * 100) / 100;
 
-            // add the ecues
-            Object.keys(selectedSchemas[ueName]).forEach(ecueName => {
-                output[ueName][ecueName] = {
-                    coef: selectedSchemas[ueName][ecueName].coef,
-                    grades: datas.filter(grade => grade.module_nom.trim() === ecueName)
-                }
-            })
-        })
+        grades[ueName][ecueName].classMean =
+          Math.round((ecueClassCount / ecueTot) * 100) / 100;
+      });
+    });
 
-        return output;
-    }
+    console.log(grades);
+
+    return grades;
+  }
+
+  /**
+   * Parse grades return fro the api depending on a given schemas
+   * @param grades The input grades to parse
+   * @param schemasId The schema id you want to use
+   * @returns The parsed grades
+   */
+  static parseGrades(grades: PegasusGrades, schemasId: SchemasId): PegasusParsedGrades {
+    const selectedSchemas = PegasusSchema.Schemas[schemasId];
+
+    const datas: PegasusGrade[] = [];
+
+    Object.keys(grades).forEach((ecueName) => {
+      Object.keys(grades[ecueName]).forEach((gradeName) => {
+        datas.push(grades[ecueName][gradeName]);
+      });
+    });
+
+    const output: PegasusParsedGrades = {};
+
+    // add the ues
+    Object.keys(selectedSchemas).forEach((ueName) => {
+      output[ueName] = {};
+
+      // add the ecues
+      Object.keys(selectedSchemas[ueName]).forEach((ecueName) => {
+        output[ueName][ecueName] = {
+          coef: selectedSchemas[ueName][ecueName].coef,
+          coefs: selectedSchemas[ueName][ecueName].coefs,
+          personalMean: 0,
+          classMean: 0,
+          grades: datas
+            .filter((grade) => grade.module_nom.trim() === ecueName)
+            .map((grade) => ({
+              mark_id: grade.mark_id,
+              evaluation_id: grade.evaluation_id,
+              module_id: grade.module_id,
+              module_nom: grade.module_nom,
+              evaluation_libelle: grade.evaluation_libelle,
+              evaluation_expected_date: grade.evaluation_expected_date,
+              evaluation_effective_date: grade.evaluation_effective_date,
+              evaluation_type_de_note_id: grade.evaluation_type_de_note_id,
+              evaluation_type_de_note_libelle: grade.evaluation_type_de_note_libelle,
+              evaluation_coef: parseFloat(grade.evaluation_coef),
+              mark_note: parseFloat(grade.mark_note),
+              mark_min: parseFloat(grade.mark_min),
+              mark_max: parseFloat(grade.mark_max),
+              mark_avg: parseFloat(grade.mark_avg),
+              mark_on: parseFloat(grade.mark_on),
+              effectif: parseInt(grade.effectif),
+            })),
+        };
+      });
+    });
+
+    return this.computeMeans(output);
+  }
 }
 
-export {
-    PegasusSchema
-};
+export { PegasusSchema };
 
-export type {
-    PegasusParsedGrades
-};
+export type { PegasusParsedGrades, PegasusUe, PegasusEcue };

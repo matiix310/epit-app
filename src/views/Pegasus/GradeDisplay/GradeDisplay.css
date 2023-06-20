@@ -1,0 +1,25 @@
+.grade-display-container.red {
+  background: #ee6055;
+}
+
+.grade-display-container.green {
+  background: #60d394;
+}
+
+.grade-display-container {
+  font-size: 8px;
+  margin: 0 10px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 999px;
+  border: solid 1px var(--black);
+  height: fit-content;
+  width: 80px;
+}
+
+.grade-display-container h1 {
+  width: 100%;
+  text-align: center;
+}

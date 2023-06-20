@@ -1,44 +1,43 @@
-
 .right-panel {
-    position: absolute;
-    width: 20%;
-    height: 80%;
-    top: 10%;
-    right: 5%;
-    background-color: var(--black);
-    border-radius: 50px;
+  position: fixed;
+  width: 20%;
+  height: 80%;
+  top: 10%;
+  right: 5%;
+  background-color: var(--black);
+  border-radius: 50px;
 }
 
 .login-container {
-    position: absolute;
-    left: 10%;
-    top: 5%;
-    width: 90%;
-    height: 25%;
+  position: absolute;
+  left: 10%;
+  top: 5%;
+  width: 90%;
+  height: 25%;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .game-container {
-    position: absolute;
-    top: 35%;
-    left: 0;
-    width: 100%;
-    height: 40%;
+  position: absolute;
+  top: 35%;
+  left: 0;
+  width: 100%;
+  height: 40%;
 
-    /* background-color: red; */
+  /* background-color: red; */
 }
 
 .copyright {
-    position: absolute;
-    left: 0;
-    bottom: 1%;
-    width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 1%;
+  width: 100%;
 
-    text-align: center;
+  text-align: center;
 
-    font-size: 100%;
-    color: #fff;
+  font-size: 100%;
+  color: #fff;
 }

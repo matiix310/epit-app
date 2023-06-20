@@ -1,0 +1,37 @@
+.ecue-component-container {
+  display: inline-block;
+  background-color: red;
+  margin: 10px 20px;
+  width: 30%;
+  height: 15vh;
+  border-radius: 20px;
+  border: solid 2px var(--black);
+  overflow: hidden;
+  transition: border 0.3s ease-in-out;
+}
+
+.ecue-component-container:hover {
+  cursor: pointer;
+  border: solid 2px transparent;
+}
+
+.ecue-title-container {
+  font-size: 10px;
+  height: 60%;
+  width: 90%;
+  margin-left: 5%;
+  display: flex;
+  align-items: center;
+}
+
+.ecue-title-container h1 {
+  text-align: center;
+  width: 100%;
+  white-space: pre-wrap;
+}
+
+.ecue-means-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
