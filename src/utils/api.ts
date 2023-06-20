@@ -26,9 +26,7 @@ type PegasusGrades = {
 };
 
 class PegasusApi {
-  static async getGrades(
-    microsoft_access_token: string
-  ): Promise<PegasusGrades> {
+  static async getGrades(microsoft_access_token: string): Promise<PegasusGrades> {
     console.log(`[REQUEST] pegasus grades`);
     const res = await fetch(
       `${process.env.REACT_APP_API_HOST}pegasus?microsoft_access_token=${microsoft_access_token}`

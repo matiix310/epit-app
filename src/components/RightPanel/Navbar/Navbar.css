@@ -1,58 +1,57 @@
 .navbar-container {
-    position: absolute;
-    bottom: 10%;
-    left: 5%;
-    width: 60%;
-    height: 10%;
-    padding: 0 15%;
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+  width: 60%;
+  height: 10%;
+  padding: 0 15%;
 
-    background-color: #fff;
+  background-color: #fff;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 
-    border-radius: 999px;
-    overflow: hidden;
+  border-radius: 999px;
+  overflow: hidden;
 }
 
 .button-container {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    transition: ease-in-out .3s;
+  transition: ease-in-out 0.3s;
 }
 
 .button-container svg {
-    height: 50%;
-    width: 100%;
-    fill: var(--black);
-    transition: ease-in-out .3s;
+  height: 50%;
+  width: 100%;
+  fill: var(--black);
+  transition: ease-in-out 0.3s;
 }
 
 .button-container:hover {
-    cursor: pointer;
-    transform: translateY(-15%);
+  cursor: pointer;
+  transform: translateY(-15%);
 }
 
 .button-container::after {
-    content: '';
-    position: absolute;
-    height: 15%;
-    width: 18%;
-    background-color: var(--yellow);
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 999px;
-    top: 100%;
+  content: "";
+  position: absolute;
+  height: 15%;
+  width: 18%;
+  background-color: var(--yellow);
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  top: 100%;
 }
 
-
 .button-container.selected svg {
-    fill: var(--yellow);
+  fill: var(--yellow);
 }

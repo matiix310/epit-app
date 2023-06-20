@@ -1,21 +1,20 @@
-import React from 'react'
+import React from "react";
 
 // styles
-import './moodle.css'
+import "./moodle.css";
 
 // components
-import RightPanel from '@components/RightPanel/RightPanel'
-import Title from '@components/Title/Title'
-
+import RightPanel from "@components/RightPanel/RightPanel";
+import Title from "@components/Title/Title";
 
 function Moodle() {
-    return (
-        <>
-            <div>Moodle</div>
-            <RightPanel />
-            <Title name='MOODLE' />
-        </>
-    )
+  return (
+    <>
+      <div>Moodle</div>
+      <RightPanel />
+      <Title name="MOODLE" />
+    </>
+  );
 }
 
-export default Moodle
+export default Moodle;
