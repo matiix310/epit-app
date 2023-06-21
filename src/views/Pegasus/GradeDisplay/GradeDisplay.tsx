@@ -2,15 +2,17 @@ import React from "react";
 
 // styles
 import "./GradeDisplay.css";
+import PegasusSchemas from "@utils/pegasusSchemas";
 
 type GrageDisplayProps = {
-  color: "green" | "red" | "transparent";
+  color: "green" | "red" | "white" | "transparent";
   grade: number;
 };
 
 const colorsEquivalent = {
   green: "#60D394",
   red: "#EE6055",
+  white: "#ffffff",
   transparent: "transparent",
 };
 
@@ -21,7 +23,7 @@ function GradeDisplay({ color, grade }: GrageDisplayProps) {
         className={["grade-display-container", color].join(" ")}
         color={colorsEquivalent[color]}
       >
-        <h1>{grade.toFixed(2).replace(/^\d\./, "0$&")}</h1>
+        <h1>{PegasusSchemas.roundGrade(grade)}</h1>
       </div>
     </>
   );

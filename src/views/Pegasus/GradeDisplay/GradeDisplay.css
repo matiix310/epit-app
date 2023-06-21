@@ -6,6 +6,10 @@
   background: #60d394;
 }
 
+.grade-display-container.white {
+  background: #fff;
+}
+
 .grade-display-container {
   font-size: 8px;
   margin: 0 10px;

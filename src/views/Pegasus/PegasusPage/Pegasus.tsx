@@ -9,39 +9,33 @@ import Title from "@components/Title/Title";
 
 // utils
 import { PegasusApi } from "@utils/api";
-import { PegasusUe, PegasusParsedGrades, PegasusSchema } from "@utils/pegasusSchema";
-import GradeDisplay from "../GradeDisplay/GradeDisplay";
-import EcueComponent from "../EcueComponent/EcueComponent";
-
-function computeUePersonalMean(ue: PegasusUe) {
-  let [count, tot]: [number, number] = [0, 0];
-
-  Object.keys(ue).forEach((ecueName) => {
-    count += ue[ecueName].personalMean * ue[ecueName].coef;
-    tot += ue[ecueName].coef;
-  });
-
-  // round the result to 2 digits
-  return Math.round((count / tot) * 100) / 100;
-}
-
-function computeUeClassMean(ue: PegasusUe) {
-  let [count, tot]: [number, number] = [0, 0];
-
-  Object.keys(ue).forEach((ecueName) => {
-    count += ue[ecueName].classMean * ue[ecueName].coef;
-    tot += ue[ecueName].coef;
-  });
-
-  // round the result to 2 digits
-  return Math.round((count / tot) * 100) / 100;
-}
+import PegasusSchemas, { PegasusEcue, PegasusParsedGrades } from "@utils/pegasusSchemas";
+import EcuesContainer from "../EcuesContainer/EcuesContainer";
+import DetailedEcue from "../DetailedEcue/DetailedEcue";
 
 function Pegasus() {
   const [grades, setGrades]: [
     PegasusParsedGrades,
     React.Dispatch<React.SetStateAction<PegasusParsedGrades>>
   ] = useState({});
+
+  const [title, setTitle] = useState("PEGASUS");
+  const [selectedEcue, setSelectedEcue] = useState("");
+
+  const HandleReturnToEcueMenu = () => {
+    setTitle("PEGASUS");
+    setSelectedEcue("");
+  };
+
+  const getSelectedEcue = (ecue: string): PegasusEcue => {
+    const ues = Object.keys(grades).map((ueName) => grades[ueName]);
+
+    const ueFind = ues.filter((ue) =>
+      Object.keys(ue).find((ecueName) => ecueName === ecue)
+    )[0];
+
+    return ueFind[ecue];
+  };
 
   useEffect(() => {
     // get the grades data
@@ -51,7 +45,7 @@ function Pegasus() {
     if (microsoft_access_token) {
       // display the data
       PegasusApi.getGrades(microsoft_access_token).then((gradesData) =>
-        setGrades(PegasusSchema.parseGrades(gradesData, "S1"))
+        setGrades(PegasusSchemas.parseGrades(gradesData, "S1"))
       );
     }
   }, []);
@@ -59,36 +53,21 @@ function Pegasus() {
   return (
     <>
       <RightPanel />
-      <Title name="PEGASUS" />
+      <Title name={title} />
       <div className="gradeContainer">
         {Object.keys(grades).length ? (
-          Object.keys(grades).map((ueName) => {
-            const personnalMean = computeUePersonalMean(grades[ueName]);
-            const classMean = computeUeClassMean(grades[ueName]);
-            return (
-              <div className="ue-container" key={ueName}>
-                <div className="ue-header">
-                  <h1 className="ue-title">{ueName}</h1>
-                  <GradeDisplay
-                    color={personnalMean >= classMean ? "green" : "red"}
-                    grade={personnalMean}
-                  />
-                  <GradeDisplay color="transparent" grade={classMean} />
-                </div>
-                <div className="ue-content">
-                  {Object.keys(grades[ueName]).map((ecueName) => (
-                    <EcueComponent
-                      name={ecueName}
-                      personnalMean={grades[ueName][ecueName].personalMean}
-                      classMean={grades[ueName][ecueName].classMean}
-                      colorId={Object.keys(grades).indexOf(ueName)}
-                      key={ecueName}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })
+          selectedEcue === "" ? (
+            <EcuesContainer
+              grades={grades}
+              onClick={(ecueName: string) => setSelectedEcue(ecueName)}
+            />
+          ) : (
+            <DetailedEcue
+              ecue={getSelectedEcue(selectedEcue)}
+              ecueName={selectedEcue}
+              onReturn={HandleReturnToEcueMenu}
+            />
+          )
         ) : (
           <h1>Loading...</h1>
         )}

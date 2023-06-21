@@ -13,6 +13,7 @@
 .login-button img {
   height: 90%;
   margin: 0 10px;
+  user-select: none;
 }
 
 .txt-container {
@@ -34,6 +35,7 @@
 
 .txt-container :nth-child(1) {
   font-weight: 500;
+  font-size: 15px;
 }
 
 .txt-container :nth-child(2) {

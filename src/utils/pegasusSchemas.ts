@@ -61,7 +61,7 @@ type CountsType = {
   class: { [key: string]: { count: number; tot: number } };
 };
 
-class PegasusSchema {
+class PegasusSchemas {
   static Schemas: { [key: string]: PegasusSchemaType } = {
     S1: {
       "UE MATH1 Mathématiques 1": {
@@ -156,6 +156,35 @@ class PegasusSchema {
     },
   };
 
+  static computeUePersonalMean(ue: PegasusUe) {
+    let [count, tot]: [number, number] = [0, 0];
+
+    Object.keys(ue).forEach((ecueName) => {
+      count += ue[ecueName].personalMean * ue[ecueName].coef;
+      tot += ue[ecueName].coef;
+    });
+
+    // round the result to 2 digits
+    return Math.round((count / tot) * 100) / 100;
+  }
+
+  static computeUeClassMean(ue: PegasusUe) {
+    let [count, tot]: [number, number] = [0, 0];
+
+    Object.keys(ue).forEach((ecueName) => {
+      count += ue[ecueName].classMean * ue[ecueName].coef;
+      tot += ue[ecueName].coef;
+    });
+
+    // round the result to 2 digits
+    return Math.round((count / tot) * 100) / 100;
+  }
+
+  static roundGrade(grade: number): string {
+    // round the result to 2 digits
+    return grade.toFixed(2).replace(/^\d\./, "0$&");
+  }
+
   /**
    * Compute the personnal and class means of the input grades.
    * @param grades The input grades to compute the personnal and class means.
@@ -211,8 +240,6 @@ class PegasusSchema {
       });
     });
 
-    console.log(grades);
-
     return grades;
   }
 
@@ -223,7 +250,7 @@ class PegasusSchema {
    * @returns The parsed grades
    */
   static parseGrades(grades: PegasusGrades, schemasId: SchemasId): PegasusParsedGrades {
-    const selectedSchemas = PegasusSchema.Schemas[schemasId];
+    const selectedSchemas = this.Schemas[schemasId];
 
     const datas: PegasusGrade[] = [];
 
@@ -274,6 +301,6 @@ class PegasusSchema {
   }
 }
 
-export { PegasusSchema };
+export default PegasusSchemas;
 
 export type { PegasusParsedGrades, PegasusUe, PegasusEcue };

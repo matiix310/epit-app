@@ -60,6 +60,7 @@ function LoginButton({ authType }: Props) {
         // microsoft logout
         setUsername("");
         window.sessionStorage.removeItem("microsoft_access_token");
+        window.sessionStorage.removeItem("microsoft_username");
       } else {
         // microsoft authentification
         const microsoftAuthUrl = `https://login.microsoftonline.com/${process.env.REACT_APP_MICROSOFT_TENANT_ID}/oauth2/v2.0/authorize?

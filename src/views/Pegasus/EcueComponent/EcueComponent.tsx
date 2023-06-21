@@ -9,6 +9,7 @@ type EcueComponentProps = {
   personnalMean: number;
   classMean: number;
   colorId: number;
+  onClick: () => void;
 };
 
 const colors: string[] = [
@@ -22,16 +23,23 @@ const colors: string[] = [
   "#EDB88B",
 ];
 
-function EcueComponent({ name, personnalMean, classMean, colorId }: EcueComponentProps) {
+function EcueComponent({
+  name,
+  personnalMean,
+  classMean,
+  colorId,
+  onClick,
+}: EcueComponentProps) {
   return (
     <>
       <div
+        onClick={onClick}
         className="ecue-component-container"
         style={{ backgroundColor: colors[colorId % colors.length] }}
       >
-        <h1 className="ecue-title-container">
+        <div className="ecue-title-container">
           <h1>{name}</h1>
-        </h1>
+        </div>
         <div className="ecue-means-container">
           <GradeDisplay
             grade={personnalMean}
