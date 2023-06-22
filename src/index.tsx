@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import Home from "./views/Home/HomePage/Home";
 
+import { tryLoadAndStartRecorder } from "@alwaysmeticulous/recorder-loader";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Pegasus from "./views/Pegasus/PegasusPage/Pegasus";
 import Zeus from "./views/Zeus/ZeusPage/zeus";
@@ -39,6 +40,17 @@ const router = createBrowserRouter([
   },
 ]);
 
-// get and render the root
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-root.render(<RouterProvider router={router} />);
+async function startApp() {
+  // Start the Meticulous recorder before you initialise your app.
+  // Note: all errors are caught and logged, so no need to surround with try/catch
+  await tryLoadAndStartRecorder({
+    projectId: "IKaNpMEIXn8mwR8sbfl6f5A4TMucGgC87dV8iaP8",
+  });
+
+  // Initalise app after the Meticulous recorder is ready, e.g.
+  // get and render the root
+  const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+  root.render(<RouterProvider router={router} />);
+}
+
+startApp();
