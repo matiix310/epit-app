@@ -9,6 +9,7 @@ type GradeComponentProps = {
   effectif: number;
   personalGrade: number;
   classGrade: number;
+  coef: number;
   onClick: () => void;
 };
 
@@ -17,6 +18,7 @@ function GradeComponent({
   effectif,
   personalGrade,
   classGrade,
+  coef,
   onClick,
 }: GradeComponentProps) {
   return (
@@ -33,6 +35,13 @@ function GradeComponent({
           />
           <GradeDisplay grade={classGrade} color="transparent" />
         </div>
+        {coef !== 1 ? (
+          <div className="grade-component-coef-container">
+            <h1 className="grade-component-coef">x{coef}</h1>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

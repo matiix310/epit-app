@@ -8,15 +8,25 @@ import RightPanel from "@components/RightPanel/RightPanel";
 import Title from "@components/Title/Title";
 
 // utils
-import { PegasusApi } from "@utils/api";
-import PegasusSchemas, { PegasusEcue, PegasusParsedGrades } from "@utils/pegasusSchemas";
+import { PegasusApi, PegasusGrades } from "@utils/api";
+import PegasusSchemas, {
+  PegasusEcue,
+  PegasusParsedGrades,
+  SchemasId,
+} from "@utils/pegasusSchemas";
 import EcuesContainer from "../EcuesContainer/EcuesContainer";
 import DetailedEcue from "../DetailedEcue/DetailedEcue";
+import Dropper from "@components/Dropper/Dropper";
 
 function Pegasus() {
   const [grades, setGrades]: [
     PegasusParsedGrades,
     React.Dispatch<React.SetStateAction<PegasusParsedGrades>>
+  ] = useState({});
+
+  const [gradesData, setGradesData]: [
+    PegasusGrades,
+    React.Dispatch<React.SetStateAction<PegasusGrades>>
   ] = useState({});
 
   const [title, setTitle] = useState("PEGASUS");
@@ -44,11 +54,21 @@ function Pegasus() {
     );
     if (microsoft_access_token) {
       // display the data
-      PegasusApi.getGrades(microsoft_access_token).then((gradesData) =>
-        setGrades(PegasusSchemas.parseGrades(gradesData, "S1"))
-      );
+      PegasusApi.getGrades(microsoft_access_token).then((gradesData) => {
+        setGradesData(gradesData);
+        setGrades(
+          PegasusSchemas.parseGrades(
+            gradesData,
+            Object.keys(PegasusSchemas.Schemas)[0] as SchemasId
+          )
+        );
+      });
     }
   }, []);
+
+  const switchSchemas = (schemasId: string) => {
+    setGrades(PegasusSchemas.parseGrades(gradesData, schemasId as SchemasId));
+  };
 
   return (
     <>
@@ -57,10 +77,21 @@ function Pegasus() {
       <div className="gradeContainer">
         {Object.keys(grades).length ? (
           selectedEcue === "" ? (
-            <EcuesContainer
-              grades={grades}
-              onClick={(ecueName: string) => setSelectedEcue(ecueName)}
-            />
+            <>
+              <Dropper
+                width="20%"
+                height="40px"
+                top="0"
+                left="0"
+                items={Object.keys(PegasusSchemas.Schemas)}
+                defaultSelection={Object.keys(PegasusSchemas.Schemas)[0]}
+                onSelect={switchSchemas}
+              />
+              <EcuesContainer
+                grades={grades}
+                onClick={(ecueName: string) => setSelectedEcue(ecueName)}
+              />
+            </>
           ) : (
             <DetailedEcue
               ecue={getSelectedEcue(selectedEcue)}

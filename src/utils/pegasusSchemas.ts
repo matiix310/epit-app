@@ -54,7 +54,7 @@ type PegasusParsedGrades = {
   [key: string]: PegasusUe;
 };
 
-type SchemasId = "S1";
+type SchemasId = "S1" | "S2";
 
 type CountsType = {
   personnal: { [key: string]: { count: number; tot: number } };
@@ -154,6 +154,108 @@ class PegasusSchemas {
         },
       },
     },
+    S2: {
+      "UE MATH2 Mathématiques 2": {
+        "ECUE MATH2 Mathématiques 2 CC": {
+          coef: 1,
+          coefs: {
+            "CC QCM": 2,
+            TD: 2,
+            "CC ECRIT": 3,
+            PARTIEL: 5,
+          },
+        },
+      },
+      "UE ALGO2 Algorithmique 2": {
+        "ECUE ALGO2 Algorithmique 2 CC": {
+          coef: 1,
+          coefs: {
+            "CC QCM": 2,
+            DM: 2,
+            "CC ECRIT": 3,
+            PARTIEL: 5,
+          },
+        },
+      },
+      "UE IP2 Informatique pratique 2": {
+        "ECUE PROG2 Programmation 2 CC": {
+          coef: 4,
+          coefs: {
+            "CC Suivi": 1,
+            "CC ECRIT": 2,
+            PARTIEL: 3,
+          },
+        },
+        "ECUE PROJ2 Projet 2 CC": {
+          coef: 3,
+          coefs: {
+            PROJET: 1,
+            PARTIEL: 2,
+          },
+        },
+      },
+      "UE SI2 Sciences de l'ingénieur 2 -": {
+        "ECUE NTS2 Nouvelles Technologies et Société 2 CC": {
+          coef: 1,
+          coefs: {
+            "CC QCM": 1,
+            "CC Suivi": 2,
+          },
+        },
+        "ECUE PHYS/ELEC2 Physique-Electronique 2 CC": {
+          coef: 2,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            PARTIEL: 2,
+          },
+        },
+        "ECUE ADO2 Architecture 2 CC": {
+          coef: 2,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            PARTIEL: 2,
+          },
+        },
+      },
+      "UE SH2 Sciences humaines 2": {
+        "ECUE TE2 Techniques d'expression 2 CC": {
+          coef: 4,
+          coefs: {
+            "CC ECRIT": 1,
+            "CC QCM": 1,
+            "CC Suivi": 2,
+            PARTIEL: 3,
+          },
+        },
+        "ECUE TIM2 Anglais technique 2 CC": {
+          coef: 3,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            "CC Suivi": 2,
+            PARTIEL: 3,
+          },
+        },
+        "ECUE CIE2 Anglais général 2 CC": {
+          coef: 3,
+          coefs: {
+            "CC QCM": 1,
+            "CC ECRIT": 1,
+            TOEIC: 1,
+            "CC Suivi": 2,
+            PARTIEL: 3,
+          },
+        },
+        "ECUE ANAC2 CC": {
+          coef: 2,
+          coefs: {
+            "ANAC PREPA": 1,
+          },
+        },
+      },
+    },
   };
 
   static computeUePersonalMean(ue: PegasusUe) {
@@ -211,13 +313,19 @@ class PegasusSchemas {
             };
           }
           // personnal mean
-          counts.personnal[grade.evaluation_type_de_note_id].count +=
-            (grade.mark_note / grade.mark_on) * 20;
-          counts.personnal[grade.evaluation_type_de_note_id].tot += 1;
+          if (!isNaN(grade.mark_note)) {
+            counts.personnal[grade.evaluation_type_de_note_id].count +=
+              (grade.mark_note / grade.mark_on) * 20 * grade.evaluation_coef;
+            counts.personnal[grade.evaluation_type_de_note_id].tot +=
+              grade.evaluation_coef;
+          }
+
           // class mean
-          counts.class[grade.evaluation_type_de_note_id].count +=
-            (grade.mark_avg / grade.mark_on) * 20;
-          counts.class[grade.evaluation_type_de_note_id].tot += 1;
+          if (!isNaN(grade.mark_avg)) {
+            counts.class[grade.evaluation_type_de_note_id].count +=
+              (grade.mark_avg / grade.mark_on) * 20 * grade.evaluation_coef;
+            counts.class[grade.evaluation_type_de_note_id].tot += grade.evaluation_coef;
+          }
         });
 
         let [ecuePersonnalCount, ecueClassCount, ecueTot] = [0, 0, 0];
@@ -303,4 +411,4 @@ class PegasusSchemas {
 
 export default PegasusSchemas;
 
-export type { PegasusParsedGrades, PegasusUe, PegasusEcue };
+export type { PegasusParsedGrades, PegasusUe, PegasusEcue, SchemasId };

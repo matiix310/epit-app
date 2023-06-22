@@ -24,13 +24,16 @@ function DetailedEcue({ ecue, ecueName, onReturn }: DetailedEcueProps) {
       (grade) => grade.evaluation_type_de_note_id === gradeName
     );
 
-    let count = 0;
+    let [count, tot] = [0, 0];
 
     grades.forEach((grade) => {
-      count += (grade.mark_note / grade.mark_on) * 20;
+      if (!isNaN(grade.mark_note)) {
+        count += (grade.mark_note / grade.mark_on) * 20 * grade.evaluation_coef;
+        tot += grade.evaluation_coef;
+      }
     });
 
-    return count / grades.length;
+    return count / tot;
   };
 
   const computeGradeClassMean = (gradeName: string): number => {
@@ -38,13 +41,16 @@ function DetailedEcue({ ecue, ecueName, onReturn }: DetailedEcueProps) {
       (grade) => grade.evaluation_type_de_note_id === gradeName
     );
 
-    let count = 0;
+    let [count, tot] = [0, 0];
 
     grades.forEach((grade) => {
-      count += (grade.mark_avg / grade.mark_on) * 20;
+      if (!isNaN(grade.mark_avg)) {
+        count += (grade.mark_avg / grade.mark_on) * 20 * grade.evaluation_coef;
+        tot += grade.evaluation_coef;
+      }
     });
 
-    return count / grades.length;
+    return count / tot;
   };
 
   return (
@@ -82,6 +88,7 @@ function DetailedEcue({ ecue, ecueName, onReturn }: DetailedEcueProps) {
                             effectif={grade.effectif}
                             personalGrade={(grade.mark_note / grade.mark_on) * 20}
                             classGrade={(grade.mark_avg / grade.mark_on) * 20}
+                            coef={grade.evaluation_coef}
                             onClick={() => {}}
                             key={
                               grade.evaluation_effective_date +
